@@ -1,0 +1,386 @@
+Lesson 2
+
+See also: Instructor Notes for Lesson 2 @ https://www.udacity.com/wiki/ud775/lesson-2-notes
+
+==> Morsel/Section 5, "Reflect: Initializing a Repository"
+	What happens when you initialize a repository? Why do you need to do it?
+
+		The basic answer is that the (hidden) directory ".git" is created in the directory
+		and a number of files containing information allowing git to track files and their 
+		various states are created and initialized in the .git directory.
+
+		Git needs a place to keep track of what actions it has taken for the files in
+		the repository that has just been created. 
+
+==> Morsel/Section 6, "Staging Area"
+	git add
+		Adds a file to the Git staging area.
+	git reset
+		Allows removing a file that was accidentally added to the staging area.
+
+==> Morsel/Section 7, "Soltion for Concept Map: init, add, staging area explained"
+	init -operates-on-> repository
+		Initialize a "repository" and doesn't seem to directly relate to other conecpts on the map.
+	staging area and working directory are "concepts" 
+		(logical abstractions?) correct???
+	add  -operates-on-> staging area 
+		because it adds/includes files (& their current state/status?) to staging area
+	status -operates-on-> working directory
+		because it also displays which files are currently NOT added/included in the staging area
+
+==> Morsel/Section 8, "Reflect: Staging Area"
+	How is the staging area different from the working directory and the repository? What value do you think it offers?
+		Not sure yet. At the very least, the files in the staging area have been tagged for inclusion 
+		in the next git committ.
+		The value is that it allows limiting the scope of a commit to only those files with changes 
+		corresponding to whatever your ostensible reason for commiting may be.
+
+==> Morsel/Section 9 "Writing Good Commit Messages"
+		Git commit message style guide on GitHub: http://udacity.github.io/git-styleguide/
+
+==> Morsel/Section 10: "Committing Changes"
+	Standard practice to phrase git commit messages as a command. i.e. Add blah to yada yada.
+	
+==> Morsel/Section 11: "git diff Revisited", Morsel/Section 12: Commit the Bug Fix
+	Note: In the "official" answer they reversed old/new from the way I interpret it to work.
+	 git diff 
+	 	compares staging area (old) vs working directory (new)
+	 git diff -staged
+	 	compares repository HEAD (??) (old) vs staging area (new)
+	 git diff commit1 commit2
+	 	compares commit1 (old) vs commit2 (new)
+
+	 git checkout master
+		Revert to "default" git HEAD setting if/when should still be 'detached'.
+
+	I was "following along" so I have already made the fix & commited it.
+
+==> Morsel/Section 13: "Reflect: Commit Size"
+	How can you use the staging area to make sure you have one commit per logical change?
+
+	Uh ... duh? You use "git add" to move only files which are part of your "logical change"
+	into the staging area. You can then verify that you have the correct files with and only
+	with the changes for the intended fix using 
+		"git diff" and "git diff --staged"
+	Then you do "git commit" and all the world is singing a happy tune of harmony.
+	Don't ya think?
+
+==> Morsel/Section 15: "Making a branch"
+	git branch
+		to display current branches and find out which one is active/default
+	git branch <name>
+		to create a new branch named <name>
+	git checkout <name>
+		to checkout the version of the files from the branch named <name>
+	
+==> Morsel/Section 16: "Reflect: Commit Size" & Morsel/Section 17: "Interview with Mike Wales"
+	What are some situations when branches would be helpful in keeping your history organized? How would branches help?
+		Not yet another frickin' "speculation question"!
+		Well, whenever you wanted to create a new directory that you could develop or experiment with the code in parallel. Instead of copying to another directory, just create a branch and your previous work is kinda, sorta "safe".
+		Other suggesions from interview: production branch, development or experimental branch, new feature branch. Anything you might want to share but with the understanding that it's not working yet.
+		Allows collaborating with yourself: Find bug in existing code while working on new feature. Can break off/back to production branch and fix the bug there.
+		Question: So how do you fix the bug in multiple branches without having to actually do the fix in
+		muliple branches? Is such a thing possible?
+		Allows you to switch context even if only because you got bored.
+		Branches => Context, context, context!
+
+==> Morsel/Section 18: "Banches for Collaboration"
+	Use separate branches to allow working on separate features or bug fixes simultaneously 
+	while keeping the work efforts separate. 
+	Avoids everyone touching the master branch simultaneously aka chaos.
+	You can take a break from your work without worrying about things chaning out from under you.
+	When feature/fix is ready, either update master to point to the tip of the feature/fix branch?
+	(Questions: Does this sidestep separate editing effort?? Poof & feature is now part of master??)
+	Or ... if master has also changed, use git merge to combine/consolidate the two branches.
+
+ Morsel/Section 18: Quiz - Draw diagram of recent commits in the asteroids repository.
+ 	Note: Needed to checkout "coins" branch (git checkout coins) to be able to view 
+ 		coins branch (git log).
+ 		ghostmonk (coins) asteroids $ git log --graph --oneline master coins easy-mode
+
+			| * 8ca88d3 Break asteroids into only 2 fragments, instead 3. 
+			|/  (created easy-mode branch )
+			* c7c0c92 Add delay back to delayBeforeBullet
+			* 3884eab Add color
+			* 3e42136 now using requestAnimationFrame
+			* 4035769 frame interval was set wrong after game was paused
+			* 25ede83 a couple missing ends with the ipad version
+			* df03538 I can't spell 'screen' apparently :)
+			| * 354dfdd Make ships able to spawn on coins
+			| * 0c6daf1 Make it possible to collect coins
+			| * a3c0ae4 Create helper functions
+			| * 656b02e First pass at adding coins
+			|/  (created coins branch )
+			* b0678b1 Revert controls
+			* f19cb1b Fix typo in space
+
+==> Morsel/Section 19: "Reachability"
+	How does git know which branch a commit belongs to?
+		Each git commit includes a back link to that commit's parent commit.
+			This is just the commit at the branch "tip" when commit was made.
+	"Reachability"
+		a commit is "reachable" from another commit if you can reach it by
+		following the back-link chain. 
+		In diagram above, anything below easy-mode commit in master is reachable.
+		However, NONE of the coins branch commits can be reaced from either master or easy-mode. (Only following back-links, right?)
+
+==> Morsel/Section 20: "Detached HEAD Revisited"		
+	"Deatched HEAD message"
+		Suppose you checkout an earlier commit via 
+			"git checkout earlier-commit"
+		This moves current git position to that commit in the git history/log. 
+		If you now make & commit changes, they are accepted, but you won't be able to find them again if you lose that commit number. 
+		They would be unreachable from any of the existing named branches.
+			This is why, if you do this, git then offers you the chance to creat a
+			named branch off of this commit via "git checkout -b <new-branch-name>"
+				Functionally equivalent to doing 
+					"git branch <new-branch-name>"
+					"git checkout <new-branch-name>"
+
+==> Morsel/Section 21: "Reflect: Visualizing with Diagrams"
+	How do the diagrams help you visualize the branch structure?
+
+	They allow you to get an overview of where/when the code changes have branched 
+	off from the master branch. They also (may) make it clearer which changes are included in which branches.
+
+==> Morsel/Section 22: "Combining Simple Files" & Morsel/Section 23: "Merging Coins into Master"
+	An introduction how git can "merge" changes from two different branches so
+	you are only working with one branch again. Yeah. Easy. Sure.
+
+	After two branches have been merged, all of the commits will appear in the log 
+	along the same consolidated "master" branch. They will be sorted in time order.
+
+==> Morsel/Section 23: "Merging on the Command Line"
+	Running through merging the coins branch into the master branch.
+		git branch (to verify that you are ON the master branch)
+		git merge master coins
+	ghostmonk (master) asteroids $ git branch
+		coins
+		easy-mode
+		* master
+	ghostmonk (master) asteroids $ git merge master coins
+		Auto-merging game.js
+		Merge made by the 'recursive' strategy.
+		 game.js | 161 +++++++++++++++++++++++++++++++++++++++++++++-------------------
+		 1 file changed, 115 insertions(+), 46 deletions(-)
+		ghostmonk (master) asteroids $
+
+	Merging includes (merges) changes which weren't part of the original branch.
+	To compare a commit against its original, pre-merge parent use command
+		git show commit_id
+
+	See how the merge affects the display of the commits by git log:
+		ghostmonk (master) asteroids $ git log --graph --oneline master easy-mode
+			*   652a1de Merge branch 'coins'
+			|\
+			| * 354dfdd Make ships able to spawn on coins
+			| * 0c6daf1 Make it possible to collect coins
+			| * a3c0ae4 Create helper functions
+			| * 656b02e First pass at adding coins
+			| | * 8ca88d3 Break asteroids into only 2 fragments, instead 3.
+			| |/
+			|/|
+			* | c7c0c92 Add delay back to delayBeforeBullet
+			* | 3884eab Add color
+			* | 3e42136 now using requestAnimationFrame
+			* | 4035769 frame interval was set wrong after game was paused
+			* | 25ede83 a couple missing ends with the ipad version
+			* | df03538 I can't spell 'screen' apparently :)
+			|/
+			* b0678b1 Revert controls
+			* f19cb1b Fix typo in space
+
+	Now that the merge has completed, the "coins" branch (label) is no longer needed.
+	"git branch -d coins" deletes the label, "coins" is now dead to git.
+
+	After the merge, git still seems to recall the branch since it displays it 
+	when the log graph (below) is requested.
+		ghostmonk (master) asteroids $ git log --graph --oneline master
+			*   652a1de Merge branch 'coins'
+			|\
+			| * 354dfdd Make ships able to spawn on coins
+			| * 0c6daf1 Make it possible to collect coins
+			| * a3c0ae4 Create helper functions
+			| * 656b02e First pass at adding coins
+			* | c7c0c92 Add delay back to delayBeforeBullet
+			* | 3884eab Add color
+			* | 3e42136 now using requestAnimationFrame
+			* | 4035769 frame interval was set wrong after game was paused
+			* | 25ede83 a couple missing ends with the ipad version
+			* | df03538 I can't spell 'screen' apparently :)
+			|/
+			* b0678b1 Revert controls
+
+	!!!> NOTA BENE <!!!
+		The currently checked-out branch is ALWAYS included in the merge!
+		Always checkout one of the two branches you’re planning on merging before doing the merge.
+		The one to check out is the branch label you want to point to the new merge commit.
+
+		You don't need to specify both branchs as arguments to git merge.
+		To merge branch2 into branch1, you can use
+			git checkout branch1
+			git merge branch2
+		The primary reason to use "git merge branch1 branch2" is as an aid to visualize
+		which branches are merged.
+
+		Dealing with line endings
+			Link below is to an article on GitHub with more detail than you actually wanted
+			about the git config option: core.autocrlf
+				https://help.github.com/articles/dealing-with-line-endings/#platform-all
+
+
+==> Morsel/Section 24: Reflect: Merging Two Branches
+	"What is the result of merging two branches together? Why do we represent it in the diagram the way we do?"
+	Merging two branches combines/integrates the commits of the two branches into a single stream.
+	It is diagramed as a meeting of two branches because that is easier to visualize
+	than scrunching together all of the commits into a single stream. 
+	(Or at least that's my opinion. This one might be interesting to follow up on and see what others thought.)
+
+==> Morsel/Section 25: Merge Conflicts
+		The messages below indicate that an auto-merge failed.
+			Auto-merging game.js
+			CONFLICT (content): Merge conflict in game.js
+			Automatic merge failed; fix conflicts and then commit the result.
+		You can restore files to pre-merge state using "git merge --abort"
+			But ALWAYS double check this by running "git log" after aborting a merge!
+==> Morsel/Section 26: Conflict Detection
+==> Morsel/Section 27: Update Easy Mode (Morsel 28 in IN?)
+
+	A git log sorta diagram of the current path. Branch easy-mode is buried in the middle since it hasn't been
+	merged/updated to include the updates made to add coins.
+		* 6695d30 Coins made yellow & solid as shown in the official answer to the quiz
+		* 0b3ea64 make coin yellow and solid
+		*   652a1de Merge branch 'coins'
+		|\
+		| * 354dfdd Make ships able to spawn on coins
+		| * 0c6daf1 Make it possible to collect coins
+		| * a3c0ae4 Create helper functions
+		| * 656b02e First pass at adding coins
+		|  | * 8ca88d3 Break asteroids into only 2 fragments, instead 3.
+		* /
+		* | c7c0c92 Add delay back to delayBeforeBullet
+		* | 3884eab Add color
+		* | 3e42136 now using requestAnimationFrame
+		* | 4035769 frame interval was set wrong after game was paused
+		* | 25ede83 a couple missing ends with the ipad version
+		* | df03538 I can't spell 'screen' apparently :)
+		|/
+		* b0678b1 Revert controls
+		* f19cb1b Fix typo in space
+
+	Alrighty then! The above apparently was not what they were thinking of. Something more like this:
+
+      / *   Merge branch 'easy-mode'
+	  | * 6695d30 Coins made yellow & solid as shown in the official answer to the quiz
+	  | * 0b3ea64 make coin yellow and solid
+	  | *   652a1de Merge branch 'coins'
+	  | |\
+	  | | * 354dfdd Make ships able to spawn on coins
+	  | | * 0c6daf1 Make it possible to collect coins
+	  | | * a3c0ae4 Create helper functions
+	  |	| * 656b02e First pass at adding coins
+	  * |    8ca88d3 Break asteroids into only 2 fragments, instead 3. ('easy-mode')
+	   \| 
+		* | c7c0c92 Add delay back to delayBeforeBullet
+		* | 3884eab Add color
+		* | 3e42136 now using requestAnimationFrame
+		* | 4035769 frame interval was set wrong after game was paused
+		* | 25ede83 a couple missing ends with the ipad version
+		* | df03538 I can't spell 'screen' apparently :)
+		|/
+		* b0678b1 Revert controls
+
+==> Morsel/Section 28: Resolving Merge Conflicts 
+
+	Sooo ... Goal is to keep "easy-mode" branch experimental, but also update it.
+	How do we update easy-mode branch to integrate all the changes in the current master branch
+	without also mucking up the master branch? 
+		1) git checkout easy-mode (switch to easy-mode branch)
+		2) git merge master easy-mode 
+			BUT oopsie! There's a problem! Automerge fails!
+			Auto-merging game.js
+			CONFLICT (content): Merge conflict in game.js
+			Automatic merge failed; fix conflicts and then commit the result.
+		3) When the merge fails, git updates the files where conflicts were detected.
+			It adds the marker lines below to outline the conflicts areas of the file.
+				<<<<<<< HEAD
+				||||||| merged common ancestors
+				=======
+				>>>>>>> master
+			You edit the file, ulimately removing all of these markers, but
+			also noodging the code into the merged solution.	
+		4) After manually merging & saving the changes in file game.js
+			git status returns
+				On branch easy-mode
+				You have unmerged paths.
+				  (fix conflicts and run "git commit")
+
+				Unmerged paths:
+				  (use "git add <file>..." to mark resolution)
+
+				        both modified:   game.js
+
+				no changes added to commit (use "git add" and/or "git commit -a")
+		5) Moving along ...
+			git add  game.js
+			git status
+				On branch easy-mode
+				All conflicts fixed but you are still merging.
+				  (use "git commit" to conclude merge)
+
+				Changes to be committed:
+
+				        modified:   game.js
+		6) And finally ... the log graph of branch "easy-mode" follows below.
+			git log --graph -n 18 --oneline
+				*   2cc1f4b Merge branch 'master' into easy-mode (after resolving conflict in game.js)
+				|\
+				| * 6695d30 Coins made yellow & solid as shown in the official answer to the quiz
+				| * 0b3ea64 make coin yellow and solid
+				| *   652a1de Merge branch 'coins'
+				| |\
+				| | * 354dfdd Make ships able to spawn on coins
+				| | * 0c6daf1 Make it possible to collect coins
+				| | * a3c0ae4 Create helper functions
+				| | * 656b02e First pass at adding coins
+				* | | 8ca88d3 Break asteroids into only 2 fragments, instead 3.
+				|/ /
+				* | c7c0c92 Add delay back to delayBeforeBullet
+				* | 3884eab Add color
+				* | 3e42136 now using requestAnimationFrame
+				* | 4035769 frame interval was set wrong after game was paused
+				* | 25ede83 a couple missing ends with the ipad version
+				* | df03538 I can't spell 'screen' apparently :)
+				|/
+				* b0678b1 Revert controls
+				* f19cb1b Fix typo in space
+				* 75928a9 Use space for movement and enter for shooting
+
+==> Morsel/Section 29: Commiting the Conflict Resolution  (Morsel 30 in Instr Notes?)
+
+==> Morsel/Section 30: Concept Map: branch, merge
+	Gotta say, just not feelin' a lot of love for the concept map. Just me?
+
+==> Morsel/Section 31: Reflect: Automatic vs. Manual Merging
+	"What are the pros and cons of Git’s automatic merging vs. always doing merges manually?"
+
+	The pros are when auto merging works, it is faster. The major con which occurs to me
+	is that if the number of changes is too large, it probably ain't gonna work and
+	you'll end up manually resolving merge conflicts. 
+	This is another one of those "I wonder what the others may have said" questions, no?
+
+	If I had a better idea, then I would share it with the world below:
+	<crickets ...> <crickets ...> <crickets ...> <crickets ...> <crickets ...> <crickets ...>
+
+
+==> Morsel/Section 31: Interview with Jeffrey Middleton
+	-> commiting "really, really, really often" is messy, but it can save your ass
+		SO DO IT! (He politely suggests)
+	-> Why a staging area? Why not just commit directly from the working directory?
+		The extra step can act to provide a "sanity check" to filter your commits
+		through. You may start something in the working directory which you expect 
+		to bundle into the next commit. But as you get into it you later decide it
+		would be better fit as a separate commit. 
+		Having a separate staging area gives you the room to more easily separate your
+		commits without having to "walk the cat back & forth" in your code. 
+		Perhaps?
