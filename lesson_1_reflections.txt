@@ -1,0 +1,164 @@
+2016-02-20 23:00
+    So I'm supposed to reflect on what I just saw.
+    Using FC (windows) or "diff -u" (unified diff format) to
+    compare files. OK. I get it though I always have to relearn
+    the bloody diff output notation every time I come back to it.
+    Anything else ... ???
+        Nope. I've got nothin.
+
+2016-02-20 23:05
+    Reflect: Using diff to Find Bugs
+        Installed "Sublime Text 3" build 3103 (text editor, windows version)
+        
+    
+How did viewing a diff between two versions of a file help you see the bug that was introduced?
+
+    Removing everything which was unchanged allowed focusing more quickly on the error in
+    on what actually changed.
+
+How could having easy access to the entire history of a file make you a more efficient programmer
+in the long term?
+
+    It allows you to review what path was taken to reach the point the code is at now.
+    At least that's the theory, I expect. In practice, there is just so much to try to 
+    comprehend that you never really can digest it all. Still, controlled chaos is better
+    than uncontrolled, no?
+
+What do you think are the pros and cons of manually choosing when to create a
+commit, like you do in Git, vs having versions automatically saved, like Google
+docs does?
+
+    Pros are that hopefully the commits reflect a more coherent & internally consistent set
+    of changes as opposed to just randomly time-sliced bits & pieces. 
+    The con of course is that if you fail to commit, then you can corrupt/lose your work.
+    
+    Proposed rule of thumb: Make one commit per logical change. 
+    	The committ description message is potentially  more useful if a commit contains 
+    	a single logical change. Good intention, no? Good luck with that.
+    	Alternative characterization: 
+    		Avoid combining unrelated changes/fixes into the same committ. 
+    		(In this best of all possible worlds! ;)
+    Deep thoughts to ponder on:
+    	Con of saving at regular intervals is saving too much with no logical organization (unit of work?)
+    	But still need to commit regularly. Going for say, a week without committing seems a less special.
+    	How much to include in a commit should vary with the content. For example, no need to worry about adding code bugs to a README, so bundling changes makes more sense in that context, yes?
+    	Avoid cluttering up the commit history log. Makes it easier to backtrack later?
+
+Why do you think some version control systems, like Git, allow saving multiple
+files in one commit, while others, like Google Docs, treat each file separately?
+
+    Consequence of the initial design choice and/or focus? 
+    Google Docs (Drive?) manages files so not surprising if it tracks changess only per file.
+    Common for non-code focused version tracking systems to track only file changes.
+    Git is for projects. Projects have files (plural) and coding changes usually do span files.
+
+    Overarching factor seems to be it depends on the logical organization of a "project".
+    If the content of one file is essentially independent of any other file then only changes within 
+    a file probably need to be tracked.
+    OTOH, if the project involves changes to groups of files, then obvious trying to track down whether
+    or not a file was part of a change by looking though the version history of each & every file is 
+    clearly patently absurd, isn't it?
+
+
+How can you use the commands git log and git diff to view the history of files?
+
+    To get colored diff output, run: 
+        git config --global color.ui auto
+    The following is used to clone the Asteroids repository: 
+        git clone https://github.com/udacity/asteroids.git
+    The details on the change "Revert controls"
+        git diff b0678b161fcf74467ed3a63110557e3d6229cfa6 f19cb1b80fe27e938e4d72770ca0a42f25e99ecc
+    You look at the diff's over time to see what changed & when.
+    But this is such a vague question. Typically I wouldn't just read git log. It would be like reading 
+    an encyclopeida. 
+    I'd try to learn more about the command so I could limit/tailor the output to display only changes
+    of a certain nature or during a certain time. (See below)
+        git help log
+        The above was actually more detailed than I could digest during a first pass.
+        What format of the <date> parameter for (eg):
+            Show commits more recent than a specific date.
+                --since=<date>
+                --after=<date> 
+            Show commits older than a specific date.
+                --until=<date>
+                --before=<date>
+        Apparently YYYY-MM-DD works. But be sure to specify "--" and "=" in parameters as well!
+        See also: 
+            http://alexpeattie.com/blog/working-with-dates-in-git
+            http://stackoverflow.com/questions/19742345/what-is-the-format-for-date-parameter-of-git-commit
+
+How might using version control make you more confident to make changes that
+could break something?
+
+    Duh! You can take risks if you know you can just restore the game back to some safe point. It's the same thing with using checkpoints in a VirtualBox VM, no?
+    Even after watching the video & doing the exercise up to this point, I've still got nothing
+    further to add to this "reflection". (Wonder what others might have come up with?)
+
+    OK, after watching the Lewis Kaneshiro interview, it did occur to me that Git does make it easier
+    to explore changing/reworking a code base. With other version control systems you're often pushing 
+    bits of sand around to reshape the beach. You have to copy all the pieces of code you need to 
+    recreate the project. However, you can't check them out of the library because you might step on 
+    someone else's currently ongoing work. 
+    Git not only gives you a complete repository of code more easily, it will also let you branch it off
+    and allow you to save/commit your experimental changes giving you a record of your progress and
+    allowing you to revert back to a previous point if you break soemthing while experimenting. 
+
+
+Now that you have your workspace set up, what do you want to try using Git for?
+
+    I want to use it to learn how to use Git's commands. Duh. Sort of why I'm here, no?
+
+
+
+NOTES:
+Enhancements to Git workspace for WINDOWS
+    Changing background color
+
+    If you prefer the background color of Git Bash to be something other than black, you can change it in the "Defaults" menu under the "Colors" tab. If you like the background color as-is, you don't need to make any changes.
+
+    Downloading necessary files
+
+    Save this file in your home directory with the name git-completion.bash.
+    Save this file in your home directory with the name git-prompt.sh.
+    Download bash_profile_course from the Downloadables section.
+    If you already have a file in your home directory named .bash_profile, copy the content from bash_profile_course and paste it at the bottom of .bash_profile. Otherwise, move bash_profile_course to your home directory and rename it to .bash_profile. (If you're curious to learn more about how bash prompts work, see this page.)
+    Making Git configurations
+
+    Run the following Git configuration commands. The first one will need to be modified if you are using a text editor other than Sublime, or if Sublime is installed in another location for you. See this page for the correct command for a couple of other popular text editors. For any other editor, you'll need to enter the command you use to launch that editor from Git Bash.
+
+    git config --global core.editor "'C:/Program Files/Sublime Text 2/sublime_text.exe' -n -w"
+    git config --global push.default upstream
+    git config --global merge.conflictstyle diff3
+    Make sure you can start your editor from Git Bash
+
+    If you use Sublime, you can do this by adding the following line to your .bash_profile:
+
+    alias subl="C:/Program\ Files/Sublime\ Text\ 2/sublime_text.exe"
+    Restart Git Bash
+
+    You'll need to close and re-open Git Bash before all your changes take effect.
+
+Enhancements to Git workspace for MAC OS X
+    Downloading necessary files
+
+    Save this file in your home directory with the name git-completion.bash.
+    Save this file in your home directory with the name git-prompt.sh.
+    Download bash_profile_course from the Downloadables section.
+    If you already have a file in your home directory named .bash_profile, copy the content from bash_profile_course and paste it at the bottom of .bash_profile. Otherwise, move bash_profile_course to your home directory and rename it to .bash_profile. If you use Linux, you may need to name this file .bashrc instead of .bash_profile. (If you're curious to learn more about how bash prompts work, see this page.)
+    Make sure you can start your editor from the terminal
+
+    If you use Sublime, you can do this by add the following line to your .bash_profile (you may need to change the path if Sublime is installed in a different location for you):
+
+    alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
+    Making Git configurations
+
+    Run the following Git configuration commands. The first one will need to be modified if you are using a text editor other than Sublime, or if Sublime is installed in another location for you. See this page for the correct command for a couple of other popular text editors. For any other editor, you'll need to enter the command you use to launch that editor from the terminal.
+
+    git config --global core.editor "'/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' -n -w"
+    git config --global push.default upstream
+    git config --global merge.conflictstyle diff3
+    (Instead of the first command, you may be able to use the simpler git config --global core.editor "subl -n -w" as shown in the video, but many students have found this does not work for them.)
+
+    Restart the terminal
+
+    You'll need to close and re-open the terminal before all your changes take effect.
