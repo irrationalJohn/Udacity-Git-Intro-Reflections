@@ -1,0 +1,7 @@
+# OK, first thing is you should ignore the .gitignore file. Wait, seriously? 
+# On second thought, maybe one actually does want to include the .gitignore file 
+# as a part of the repository so you can track changes to it over time?
+# OK, fine. Never mind.
+
+# pay no attention to the crude archive subdir behind the .gitignore curtain
+save/
